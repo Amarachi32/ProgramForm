@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Hosting;
 using ProgramFormInfrastructure.Extensions;
 public class Program
 {
@@ -10,6 +11,8 @@ public class Program
         builder.Services.AddControllers();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddAutoMapper(typeof(Program));
+
         builder.Services.AddSwaggerGen();
         builder.Services.RegisterService();
         var app = builder.Build();

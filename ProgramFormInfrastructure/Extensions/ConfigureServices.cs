@@ -1,6 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using ProgramFormCore.Implementations;
+using ProgramFormCore.Interfaces;
 using ProgramFormCore.Models;
-
+using ProgramFormInfrastructure.Interfaces;
+using ProgramFormInfrastructure.Services;
 
 namespace ProgramFormInfrastructure.Extensions
 {
@@ -16,6 +19,8 @@ namespace ProgramFormInfrastructure.Extensions
                 return cosmosDbInitializer.InitializeContainerAsync<ProgramDetails>().Result;
             });
 
+            services.AddScoped<IRepository<ProgramDetails>, Repository<ProgramDetails>>();
+            services.AddScoped<IProgramDetailsService, ProgramDetailsService>();
         }
 
     }

@@ -7,7 +7,7 @@ namespace ProgramForm.Helper
 {
     public class MappingProfile : Profile
     {
-        protected MappingProfile()
+        public MappingProfile()
         {
             CreateMap<ApplicationFormDto, ApplicationForm>().ReverseMap();
             CreateMap<WorkFlowDto, WorkFlow>().ReverseMap();
@@ -18,10 +18,8 @@ namespace ProgramForm.Helper
 
 
             CreateMap<PreviewDto, Preview>()
-                .ForMember(dest => dest.ProgramDetails.Description, opt => opt.MapFrom(src => src.Description))
-                .ForMember(dest => dest.ProgramDetails.Benefits, opt => opt.MapFrom(src => src.Benefits))
-                .ForMember(dest => dest.ProgramDetails.Criteria, opt => opt.MapFrom(src => src.Criteria))
-                .ReverseMap();
+                .AfterMap((src, dest) => dest.ProgramDetails.Description = src.Description).ReverseMap();
+             
         }
     }
 }
