@@ -12,15 +12,17 @@ namespace ProgramForm.Controllers
     {
         private readonly IProgramDetailsService _programDetailsService;
         private readonly IApplicationFormService _applicationFormService;
+        private readonly IWorkFlowService _workService;
         private readonly IFileUploadService _fileUploadServices;
         private readonly IMapper _mapper;
 
-        public ProgramDetailsController(IProgramDetailsService programDetailsService, IApplicationFormService applicationFormService, IFileUploadService fileUploadServices ,IMapper mapper)
+        public ProgramDetailsController(IProgramDetailsService programDetailsService, IApplicationFormService applicationFormService, IWorkFlowService workService, IFileUploadService fileUploadServices, IMapper mapper)
         {
             _programDetailsService = programDetailsService;
             _applicationFormService = applicationFormService;
             _fileUploadServices = fileUploadServices;
             _mapper = mapper;
+            _workService = workService;
         }
 
         [HttpGet]
@@ -114,5 +116,15 @@ namespace ProgramForm.Controllers
         }
 
 
+        [HttpPost("workflow")]
+        public async Task<ActionResult<WorkFlowDto>> CreateWorkflow([FromBody] WorkFlowDto workFlowDto)
+        {
+            if (workFlowDto == null)
+            {
+                return BadRequest("ProgramDetails object is null");
+            }
+            var createdWorkflowForm = await _workService.CreateWorkFlowAsync(_mapper.Map<WorkFlowDto, WorkFlow>(workFlowDto));
+            return CreatedAtAction(nameof(GetById), new { id = createdWorkflowForm.Id }, createdWorkflowForm);
+        }
     }
 }

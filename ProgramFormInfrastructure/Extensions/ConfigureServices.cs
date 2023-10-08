@@ -26,6 +26,9 @@ namespace ProgramFormInfrastructure.Extensions
             services.AddScoped<IApplicationFormService, ApplicationFormService>();
 
             services.AddScoped<IFileUploadService, FileUploadService>();
+
+            services.AddScoped<IRepository<WorkFlow>, Repository<WorkFlow>>();
+            services.AddScoped<IWorkFlowService, WorkFlowService>();
         }
 
     }

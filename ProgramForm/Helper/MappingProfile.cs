@@ -18,12 +18,18 @@ namespace ProgramForm.Helper
             CreateMap<ApplicationForm, ApplicationFormResponseDto>().ReverseMap();
 
 
-            CreateMap<WorkFlowDto, WorkFlow>().ReverseMap();
+            CreateMap<WorkFlow, WorkFlowDto>().ReverseMap();
+            CreateMap<WorkStageDto, WorkStage>().ReverseMap();
+            CreateMap<StageType, StageTypeDto>().ReverseMap();
             CreateMap<ProgramDetailsDto, ProgramDetails>().ReverseMap();
             CreateMap<ProgramDetailsResponseDto, ProgramDetails>().ReverseMap();
             CreateMap<PreviewDto, Preview>().ReverseMap();
             CreateMap<SkillDto, Skill>().ReverseMap();
             CreateMap<ProgramInformationDto, ProgramInformation>().ReverseMap();
+
+
+            CreateMap<PreviewDto, Preview>()
+                .AfterMap((src, dest) => dest.ProgramDetails.Description = src.Description).ReverseMap();
 
         }
     }
