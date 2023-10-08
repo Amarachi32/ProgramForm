@@ -26,7 +26,7 @@ namespace ProgramFormTests
             A.CallTo(() => fakeProgramDetailsService.GetAllProgramDetailsAsync())
                 .Returns(Task.FromResult<IEnumerable<ProgramDetails>>(programDetailsList));
 
-            var controller = new ProgramDetailsController(fakeProgramDetailsService,null, fakeMapper);
+            var controller = new ProgramDetailsController(fakeProgramDetailsService, null, null, null, fakeMapper);
 
             // Act
             var result = await controller.Get();
@@ -36,7 +36,7 @@ namespace ProgramFormTests
             var programDetailsDtoList = Assert.IsAssignableFrom<IEnumerable<ProgramDetailsDto>>(okResult.Value);
 
 
-            Assert.Equal(2, programDetailsDtoList.Count()); 
+            Assert.Equal(2, programDetailsDtoList.Count());
 
             A.CallTo(() => fakeProgramDetailsService.GetAllProgramDetailsAsync()).MustHaveHappenedOnceExactly();
         }

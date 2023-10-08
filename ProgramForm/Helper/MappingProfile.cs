@@ -23,13 +23,13 @@ namespace ProgramForm.Helper
             CreateMap<StageType, StageTypeDto>().ReverseMap();
             CreateMap<ProgramDetailsDto, ProgramDetails>().ReverseMap();
             CreateMap<ProgramDetailsResponseDto, ProgramDetails>().ReverseMap();
-            CreateMap<PreviewDto, Preview>().ReverseMap();
             CreateMap<SkillDto, Skill>().ReverseMap();
             CreateMap<ProgramInformationDto, ProgramInformation>().ReverseMap();
 
-
-            CreateMap<PreviewDto, Preview>()
-                .AfterMap((src, dest) => dest.ProgramDetails.Description = src.Description).ReverseMap();
+            CreateMap<Preview, PreviewDto>()
+            .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.ProgramDetails.Description))
+            .ForMember(dest => dest.Benefits, opt => opt.MapFrom(src => src.ProgramDetails.Benefits))
+            .ForMember(dest => dest.Criteria, opt => opt.MapFrom(src => src.ProgramDetails.Criteria));
 
         }
     }

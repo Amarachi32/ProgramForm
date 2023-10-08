@@ -29,6 +29,9 @@ namespace ProgramFormInfrastructure.Extensions
 
             services.AddScoped<IRepository<WorkFlow>, Repository<WorkFlow>>();
             services.AddScoped<IWorkFlowService, WorkFlowService>();
+
+            services.AddScoped<IRepository<Preview>, Repository<Preview>>();
+            services.AddScoped<IPreviewService, PreviewService>();
         }
 
     }
