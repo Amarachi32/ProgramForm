@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ProgramFormCore.Models;
 using ProgramFormInfrastructure.DTOs.Request;
@@ -12,11 +11,15 @@ namespace ProgramForm.Controllers
     public class ProgramDetailsController : ControllerBase
     {
         private readonly IProgramDetailsService _programDetailsService;
+        private readonly IApplicationFormService _applicationFormService;
+        private readonly IFileUploadService _fileUploadServices;
         private readonly IMapper _mapper;
 
-        public ProgramDetailsController(IProgramDetailsService programDetailsService, IMapper mapper)
+        public ProgramDetailsController(IProgramDetailsService programDetailsService, IApplicationFormService applicationFormService, IFileUploadService fileUploadServices ,IMapper mapper)
         {
             _programDetailsService = programDetailsService;
+            _applicationFormService = applicationFormService;
+            _fileUploadServices = fileUploadServices;
             _mapper = mapper;
         }
 
@@ -52,7 +55,6 @@ namespace ProgramForm.Controllers
             var programDetailsEntity = _mapper.Map<ProgramDetailsDto, ProgramDetails>(programDetailsDto);
             var createdProgramDetails = await _programDetailsService.CreateProgramDetailsAsync(programDetailsEntity);
             var createdProgramDetailsDto = _mapper.Map<ProgramDetails, ProgramDetailsDto>(createdProgramDetails);
-
             return CreatedAtAction(nameof(GetById), new { id = createdProgramDetails.Id }, createdProgramDetails);
         }
 
@@ -72,7 +74,6 @@ namespace ProgramForm.Controllers
             var updatedProgramDetail = _mapper.Map(programDetailsDto, existingProgramDetail);
             await _programDetailsService.UpdateProgramDetailsAsync(id, updatedProgramDetail);
 
-
             var updatedProgramDetailsDto = _mapper.Map<ProgramDetails, ProgramDetailsDto>(updatedProgramDetail);
             return NoContent();
         }
@@ -89,6 +90,29 @@ namespace ProgramForm.Controllers
             await _programDetailsService.DeleteProgramDetailsAsync(id);
             return NoContent();
         }
+
+
+        [HttpPost("application")]
+        public async Task<ActionResult<ProgramDetails>> CreateApplicationForm([FromForm] ApplicationFormDto applicationFormDto)
+        {
+            if (applicationFormDto == null)
+            {
+                return BadRequest("ProgramDetails object is null");
+            }
+
+            // var userId = HttpContext.User.RetrieveUserIdFromPrincipal();
+            var imageUrl = await _fileUploadServices.AddFileAsync(applicationFormDto.CoverImage);
+            var fileUrl = await _fileUploadServices.AddFileAsync(applicationFormDto.ProfileDto.Resume);
+            var applicationForm = _mapper.Map<ApplicationFormDto, ApplicationForm>(applicationFormDto);
+            applicationForm.ImageUrl = imageUrl;
+            applicationForm.Profile.Resume = fileUrl;
+
+
+            var createdProgramDetails = await _applicationFormService.CreateApplicationFormAsync(applicationForm);
+
+            return CreatedAtAction(nameof(GetById), new { id = createdProgramDetails.Id }, createdProgramDetails);
+        }
+
 
     }
 }

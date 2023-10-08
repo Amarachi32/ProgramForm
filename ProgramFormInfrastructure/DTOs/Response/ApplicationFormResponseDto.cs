@@ -1,29 +1,45 @@
-﻿using Microsoft.AspNetCore.Http;
-using Newtonsoft.Json;
-using ProgramFormCore.Models;
+﻿using Newtonsoft.Json;
 
-namespace ProgramFormInfrastructure.DTOs.Request
+namespace ProgramFormInfrastructure.DTOs.Response
 {
-    public class ApplicationFormDto
+    public class ProgramDetailsResponseDto
+    {
+        public class ProgramDetailsDto
+        {
+            [JsonProperty("title")]
+            public string Title { get; set; }
+            [JsonProperty("summary")]
+            public string? Summary { get; set; }
+            [JsonProperty("description")]
+            public string Description { get; set; }
+
+            [JsonProperty("benefits")]
+            public string? Benefits { get; set; }
+            [JsonProperty("criteria")]
+            public string? Criteria { get; set; }
+        }
+
+    }
+    public class ApplicationFormResponseDto
     {
         [JsonProperty("programDetails")]
-        public ProgramDetailsDto ProgramDetailsDto { get; set; }
+        public ProgramDetailsResponseDto ProgramDetailsDto { get; set; }
         [JsonProperty("coverImage")]
-        public IFormFile CoverImage { get; set; }
+        public string ImageUrl { get; set; }
         [JsonProperty("programInfo")]
-        public PersonalInfoDto PersonalInfoDto { get; set; }
+        public PersonalInfoResponseDto PersonalInfoDto { get; set; }
         [JsonProperty("profile")]
-        public UserProfileDto ProfileDto { get; set; }
+        public UserProfileResponseDto ProfileDto { get; set; }
         [JsonProperty("AdditionalQuestion")]
-        public ICollection<AdditionalQuestionDto> QuestionDtos { get; set; }
+        public ICollection<AdditionalQuestionResponseDto> QuestionDtos { get; set; }
 
-        public ProgramDetailsDto GetProgramDetails()
+        public ProgramDetailsResponseDto GetProgramDetails()
         {
             return ProgramDetailsDto;
         }
     }
 
-    public class PersonalInfoDto
+    public class PersonalInfoResponseDto
     {
         [JsonProperty("firstName")]
         public string? FirstName { get; set; }
@@ -42,42 +58,42 @@ namespace ProgramFormInfrastructure.DTOs.Request
         [JsonProperty("dateOfBirth")]
         public DateTime DateOfBirth { get; set; }
         [JsonProperty("question")]
-        public ICollection<QuestionDto> Questions { get; set; } = new List<QuestionDto>();
+        public ICollection<QuestionResponseDto> Questions { get; set; } = new List<QuestionResponseDto>();
 
-        public void AddQuestion(QuestionDto question)
+        public void AddQuestion(QuestionResponseDto question)
         {
             Questions.Add(question);
         }
 
-        public QuestionDto GetQuestionById(string id)
+        public QuestionResponseDto GetQuestionById(string id)
         {
             return Questions.FirstOrDefault(q => q.Id == id);
         }
 
-        public T GetQuestionByType<T>(QuestionTypeDto type) where T : QuestionBaseDto
+        public T GetQuestionByType<T>(QuestionTypeResponseDto type) where T : QuestionBaseResponseDto
         {
             return Questions.OfType<T>().FirstOrDefault(q => q.Type == type);
         }
     }
 
-    public class QuestionDto
+    public class QuestionResponseDto
     {
         [JsonProperty("id")]
         public string Id { get; set; }
         [JsonProperty("title")]
         public string Title { get; set; }
         [JsonProperty("QuestionType")]
-        public QuestionTypeDto Type { get; set; }
+        public QuestionTypeResponseDto Type { get; set; }
     }
 
-    public abstract class QuestionBaseDto
+    public abstract class QuestionBaseResponseDto
     {
         [JsonProperty("title")]
         public string YourQuestion { get; set; }
         [JsonProperty("QuestionType")]
-        public QuestionTypeDto Type { get; set; }
+        public QuestionTypeResponseDto Type { get; set; }
     }
-    public enum QuestionTypeDto
+    public enum QuestionTypeResponseDto
     {
         Paragraph,
         ShortAnswer,
@@ -90,59 +106,59 @@ namespace ProgramFormInfrastructure.DTOs.Request
         VideoQuestion
     }
 
-    public class Paragraph : QuestionBaseDto
+    public class Paragraph : QuestionBaseResponseDto
     {
         public int MaxChoice { get; set; }
     }
 
-    public class ShortAnswerQuestion : QuestionBaseDto
+    public class ShortAnswerQuestion : QuestionBaseResponseDto
     {
         public bool EnableOtherQuestion { get; set; }
     }
 
-    public class YesNoQuestion : QuestionBaseDto
+    public class YesNoQuestion : QuestionBaseResponseDto
     {
         public bool Answer { get; set; }
 
         public bool IsDisqualified { get; set; } = false;
     }
 
-    public class DropdownQuestion : QuestionBaseDto
+    public class DropdownQuestion : QuestionBaseResponseDto
     {
         public List<string> Choice { get; set; }
         public bool IsEnabled { get; set; }
     }
 
-    public class MultipleChoiceQuestion : QuestionBaseDto
+    public class MultipleChoiceQuestion : QuestionBaseResponseDto
     {
         public List<string> Choice { get; set; }
         public IEnumerable<string> Options { get; set; }
     }
 
-    public class DateQuestion : QuestionBaseDto
+    public class DateQuestion : QuestionBaseResponseDto
     {
         public string Prompt { get; set; }
     }
 
-    public class NumberQuestion : QuestionBaseDto
+    public class NumberQuestion : QuestionBaseResponseDto
     {
         public int MaxChoiceAllowed { get; set; }
     }
 
-    public class FileUploadQuestion : QuestionBaseDto
+    public class FileUploadQuestion : QuestionBaseResponseDto
     {
         public string Questions { get; set; }
     }
 
 
-    public class UserProfileDto
+    public class UserProfileResponseDto
     {
-        public ICollection<EducationDto> EducationDto { get; set; }
-        public ICollection<ExperienceDto> ExperienceDto { get; set; }
-        public IFormFile Resume { get; set; }
-        public ICollection<QuestionDto> QuestionDtos { get; set; } = new List<QuestionDto>();
+        public ICollection<EducationResponseDto> EducationDto { get; set; }
+        public ICollection<ExperienceResponseDto> ExperienceDto { get; set; }
+        public string Resume { get; set; }
+        public ICollection<QuestionResponseDto> QuestionDtos { get; set; } = new List<QuestionResponseDto>();
     }
-    public class EducationDto
+    public class EducationResponseDto
     {
         public string School { get; set; } = "Harvad University";
         public string Degree { get; set; } = " Master's Degree";
@@ -155,7 +171,7 @@ namespace ProgramFormInfrastructure.DTOs.Request
     }
 
 
-    public class ExperienceDto
+    public class ExperienceResponseDto
     {
         public string Company { get; set; } = "Misk Foundation";
         public string Title { get; set; }
@@ -165,21 +181,21 @@ namespace ProgramFormInfrastructure.DTOs.Request
         public bool CurrentlyWorking { get; set; } = false;
     }
 
-    public enum GenderDto
+    public enum GenderResponseDto
     {
         Female,
         Male,
         TransGender
     }
 
-    public class AdditionalQuestionDto
+    public class AdditionalQuestionResponseDto
     {
         public string Description { get; set; }
         public DateTime YearOfGraduation { get; set; }
         public string YourQuestion { get; set; }
         public List<string> Choice { get; set; }
         public bool IsRejected { get; set; }
-        public ICollection<QuestionDto> Questions { get; set; } = new List<QuestionDto>();
+        public ICollection<QuestionResponseDto> Questions { get; set; } = new List<QuestionResponseDto>();
     }
 
 }

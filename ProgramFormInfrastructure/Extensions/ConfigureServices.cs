@@ -21,6 +21,11 @@ namespace ProgramFormInfrastructure.Extensions
 
             services.AddScoped<IRepository<ProgramDetails>, Repository<ProgramDetails>>();
             services.AddScoped<IProgramDetailsService, ProgramDetailsService>();
+
+            services.AddScoped<IRepository<ApplicationForm>, Repository<ApplicationForm>>();
+            services.AddScoped<IApplicationFormService, ApplicationFormService>();
+
+            services.AddScoped<IFileUploadService, FileUploadService>();
         }
 
     }

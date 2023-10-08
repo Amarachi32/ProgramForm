@@ -8,7 +8,7 @@ namespace ProgramFormCore.Models
         [JsonProperty("programDetails")]
         public ProgramDetails ProgramDetails { get; set; }
         [JsonProperty("coverImage")]
-        public IFormFile CoverImage { get; set; }
+        public string ImageUrl { get; set; }
         [JsonProperty("programInfo")]
         public PersonalInfo PersonalInfo { get; set; }
         [JsonProperty("profile")]
@@ -31,7 +31,7 @@ namespace ProgramFormCore.Models
         [JsonProperty("email")]
         public string? Email { get; set; }
         [JsonProperty("phoneNumber")]
-        public int? PhoneNumber { get; set; }
+        public string? PhoneNumber { get; set; }
         [JsonProperty("Nationality")]
         public string Nationality { get; set; }
         [JsonProperty("residenceCountry")]
@@ -136,7 +136,7 @@ namespace ProgramFormCore.Models
     {
         public ICollection<Education> Education { get; set; }
         public ICollection<Experience> Experience { get; set; }
-        public IFormFile Resume { get; set; }
+        public string Resume { get; set; }
         public ICollection<Question> Questions { get; set; } = new List<Question>();
     }
     public class Education : BaseEntity

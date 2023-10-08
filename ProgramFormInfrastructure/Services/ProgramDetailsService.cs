@@ -1,11 +1,6 @@
 ﻿using ProgramFormCore.Interfaces;
 using ProgramFormCore.Models;
 using ProgramFormInfrastructure.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ProgramFormInfrastructure.Services
 {
