@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ProgramFormCore.Models;
 using ProgramFormInfrastructure.DTOs.Request;
+using ProgramFormInfrastructure.DTOs.Response;
 using ProgramFormInfrastructure.Interfaces;
 
 namespace ProgramForm.Controllers
@@ -11,25 +12,28 @@ namespace ProgramForm.Controllers
     public class WorkFlowController : ControllerBase
     {
         private readonly IWorkFlowService _workService;
-        private readonly IProgramDetailsService _programService;
         private readonly IMapper _mapper;
 
-        public WorkFlowController(IWorkFlowService workService, IProgramDetailsService programService, IMapper mapper)
+        public WorkFlowController(IWorkFlowService workService, IMapper mapper)
         {
             _workService = workService;
-            _programService = programService;
             _mapper = mapper;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ApplicationForm>>> Get()
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<WorkFlowDto>))]
+
+        public async Task<ActionResult<IEnumerable<WorkFlowDto>>> Get()
         {
-            var programdetail = _programService.GetAllProgramDetailsAsync();
-            var appForms = await _workService.GetAllWorkFlowAsync();
-            return Ok(appForms);
+            var workFlow = await _workService.GetAllWorkFlowAsync();
+            var workFlowDto = _mapper.Map<IEnumerable<ApplicationFormResponseDto>>(workFlow);
+            return Ok(workFlowDto);
         }
 
         [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(WorkFlowDto))]
         public async Task<ActionResult<WorkFlowDto>> UpdateWorkFlow(string id, [FromBody] WorkFlowDto workFlowDto)
         {
             if (workFlowDto == null)

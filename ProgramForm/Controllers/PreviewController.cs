@@ -22,6 +22,8 @@ namespace ProgramForm.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<PreviewDto>))]
+
         public async Task<ActionResult<IEnumerable<PreviewDto>>> Get()
         {
             var previews = await _previewService.GetAllPreviewAsync();

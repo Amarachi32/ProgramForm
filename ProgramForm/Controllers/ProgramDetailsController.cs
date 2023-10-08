@@ -26,6 +26,7 @@ namespace ProgramForm.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ProgramDetailsDto>))]
         public async Task<ActionResult<IEnumerable<ProgramDetailsDto>>> Get()
         {
             var programDetails = await _programDetailsService.GetAllProgramDetailsAsync();
@@ -35,6 +36,8 @@ namespace ProgramForm.Controllers
         }
 
         [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProgramDetailsDto))]
         public async Task<ActionResult<ProgramDetailsDto>> GetById(string id)
         {
             var programDetail = await _programDetailsService.GetProgramDetailsByIdAsync(id);
@@ -48,6 +51,8 @@ namespace ProgramForm.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(ProgramDetailsDto))]
         public async Task<ActionResult<ProgramDetailsDto>> PostProgramDetails(ProgramDetailsDto programDetailsDto)
         {
             if (programDetailsDto == null)
@@ -61,6 +66,9 @@ namespace ProgramForm.Controllers
         }
 
         [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult<ProgramDetailsDto>> PutProgramDetails(string id, [FromBody] ProgramDetailsDto programDetailsDto)
         {
             if (programDetailsDto == null)
@@ -81,6 +89,8 @@ namespace ProgramForm.Controllers
         }
 
         [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> Delete(string id)
         {
             var programDetail = await _programDetailsService.GetProgramDetailsByIdAsync(id);
@@ -95,6 +105,8 @@ namespace ProgramForm.Controllers
 
 
         [HttpPost("application")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(ProgramDetails))]
         public async Task<ActionResult<ProgramDetails>> CreateApplicationForm([FromForm] ApplicationFormDto applicationFormDto)
         {
             if (applicationFormDto == null)
@@ -117,6 +129,8 @@ namespace ProgramForm.Controllers
 
 
         [HttpPost("workflow")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(WorkFlowDto))]
         public async Task<ActionResult<WorkFlowDto>> CreateWorkflow([FromBody] WorkFlowDto workFlowDto)
         {
             if (workFlowDto == null)
